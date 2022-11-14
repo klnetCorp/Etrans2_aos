@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "898852239878",
+    "firebase_url": "https://etrans-dfb51.firebaseio.com",
+    "project_id": "etrans-dfb51",
+    "storage_bucket": "etrans-dfb51.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:898852239878:android:0154b186d2e5f3ec",
+        "android_client_info": {
+          "package_name": "etrans.klnet.co.kr.etrans"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "898852239878-aol1vfgbg4lbo45umlrsdp35in9fgas3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCWZMQJLl-gFAPSDEEFokCJPqnzHqZr-vo"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

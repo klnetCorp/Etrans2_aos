@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="etrans.klnet.co.kr.etrans.MainActivity">
+
+    <RelativeLayout
+        android:id="@+id/rel_main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+
+        <RelativeLayout
+            android:id="@+id/rel_wv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <etrans.klnet.co.kr.etrans.ObservableWebView xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/webView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rel_intro"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+        <ImageView
+            android:id="@+id/iv_intro"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/intro"></ImageView>
+    </RelativeLayout>
+
+</RelativeLayout>

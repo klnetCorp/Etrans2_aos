@@ -6,24 +6,23 @@ android {
             keyAlias 'keystore'
             keyPassword 'klnet123'
             storePassword 'klnet123'
-            storeFile file('/Users/ebiz/Desktop/workspace/etrans/android/new/Etrans_1_0_8/keystore.jks')
+            storeFile file('D:/StudioProjects/Etrans_1_0_8/keystore.jks')
         }
 
         releaseWithSignedKey {
             keyAlias 'keystore'
             keyPassword 'klnet123'
-            //storeFile file('/Users/pan/Desktop/workspace/klnet/etrans/android/new/Etrans_1_0_8/keystore.jks')
-            storeFile file('/Users/ebiz/Desktop/workspace/etrans/android/new/Etrans_1_0_8/keystore.jks')
+            storeFile file('/Users/pan/Desktop/workspace/klnet/etrans/android/new/Etrans_1_0_8/keystore.jks')
             storePassword 'klnet123'
             v2SigningEnabled false
         }
     }
 
-    compileSdkVersion 30
+    compileSdkVersion 29
     defaultConfig {
         applicationId "etrans.klnet.co.kr.etrans"
-        minSdkVersion 19
-        targetSdkVersion 30
+        minSdkVersion 15
+        targetSdkVersion 29
         versionCode 20
         versionName "1.4"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -46,7 +45,7 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.android.support:appcompat-v7:26.1.0'
+    implementation 'com.android.support:appcompat-v7:28.0.0'
 
 
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'

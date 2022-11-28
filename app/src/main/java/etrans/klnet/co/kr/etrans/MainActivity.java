@@ -515,7 +515,6 @@ public class MainActivity extends AppCompatActivity {
                     //String vPassword = prefs.getString("vPassword", "");  //deviceId
 
                     if ( BuildConfig.DEBUG) {
-                        Log.d("CHECK", "vId : " + vId + " vPassword : " + vPassword + " isAutoLogin : " + isAutoLogin);
                         Log.d("CHECK", "vId : " + vId + " deviceId : " + deviceId + " isAutoLogin : " + isAutoLogin);
                     }
 
@@ -803,8 +802,9 @@ public class MainActivity extends AppCompatActivity {
                     SharedPreferences.Editor editor = prefs.edit();
                     editor.putString("isAutoLogin", isAutoLogin);
                     editor.putString("vId", vId);
-                    editor.putString("vDeviceKey", vDeviceKey);
+                    //editor.putString("vDeviceKey", vDeviceKey);
                     editor.remove("vPassword");
+                    editor.remove("vDeviceKey");
 
                     editor.commit();
                     DataSet.getInstance().userid = vId;
@@ -1260,7 +1260,7 @@ public class MainActivity extends AppCompatActivity {
                     SharedPreferences.Editor editor = prefs.edit();
                     //editor.putString("isAutoLogin", "N");
                     //editor.putString("vId", "");
-                    editor.putString("vDeviceKey", "");
+                    //editor.putString("vDeviceKey", "");
 
                     editor.commit();
                     WebView01.loadUrl(DataSet.connect_url + arg);

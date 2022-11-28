@@ -208,8 +208,9 @@ public class MainActivity extends AppCompatActivity {
             if (!isRootingFlag) {
                 isRootingFlag = checkRootingFiles(createFiles(RootFilesPath));
             }
-
-            Log.d("test", "isRootingFlag = " + isRootingFlag);
+            if ( BuildConfig.DEBUG) {
+                Log.d("test", "isRootingFlag = " + isRootingFlag);
+            }
 
             alertDialogBuilderExit.setTitle("프로그램 종료");
 
@@ -267,13 +268,13 @@ public class MainActivity extends AppCompatActivity {
         deviceId = DataSet.getDeviceID(this);
         //     2019.04.30 버전체크 로직변경 LDG
         //forceUpdate();
-        Log.d("CHECK", "deviceId :" + deviceId);
+        if ( BuildConfig.DEBUG) Log.d("CHECK", "deviceId :" + deviceId);
 
         WebView01 = (ObservableWebView) findViewById(R.id.webView);
         WebSettings webSettings = WebView01.getSettings();
         webSettings.setJavaScriptEnabled(true);
         webSettings.setAllowFileAccess(true);
-        webSettings.setDomStorageEnabled(true);
+        webSettings.setDomStorageEnabled(true);  //localstoreage
         WebView01.addJavascriptInterface(new AndroidBridge(), "AndroidInterface");
         WebView01.clearHistory();
         WebView01.clearCache(true);
@@ -355,40 +356,6 @@ public class MainActivity extends AppCompatActivity {
 
         Log.i("CHECK", "url :" + DataSet.connect_url + "/newmobile/login.do");
         WebView01.loadUrl(DataSet.connect_url + "/newmobile/login.do");
-
-//        WebView01.setOnTouchListener(new OnClickWithOnTouchListener(this, new OnClickWithOnTouchListener.OnClickListener() {
-//            @Override
-//            public void onClick() {
-//                // onclick 이벤트 처리
-//                clickCount++;
-//                if (clickCount > 5) {
-//                    clickCount = 0;
-//                }
-//                Log.i("CHECK", "on Clik 이다...." + clickCount);
-//            }
-//            @Override
-//            public void onLongClick() {
-//                // 로그인 화면에서 길게누르고 5번클릭 길게 누르고
-//                if (clickCount == 5 && clickLongCount == 1) {
-//                    if ("D".equals(DataSet.isMode)) {
-//                        //REAL 사이트
-//                        DataSet.connect_url = DataSet.connect_real_url;
-//                        DataSet.push_url = DataSet.push_real_url;
-//                        DataSet.isMode = "P";
-//                    } else {
-//                        //TEST 사이트
-//                        DataSet.connect_url = DataSet.connect_test_url;
-//                        DataSet.push_url = DataSet.push_test_url;
-//                        DataSet.isMode = "D";
-//                    }
-//                    WebView01.loadUrl("javascript:setChangeMode('"+DataSet.isMode+"')");
-//                } else  clickLongCount = 1;
-//
-//                clickCount = 0;
-//                Log.i("CHECK", "on Long Click 이다...." + clickLongCount);
-//            }
-//        }));
-
 
 
         WebView01.setDownloadListener(new DownloadListener() {
@@ -547,8 +514,10 @@ public class MainActivity extends AppCompatActivity {
                     String vId = prefs.getString("vId", "");
                     //String vPassword = prefs.getString("vPassword", "");  //deviceId
 
-                    //Log.d("CHECK", "vId : " + vId + " vPassword : " + vPassword + " isAutoLogin : " + isAutoLogin);
-                    Log.d("CHECK", "vId : " + vId + " deviceId : " + deviceId + " isAutoLogin : " + isAutoLogin);
+                    if ( BuildConfig.DEBUG) {
+                        Log.d("CHECK", "vId : " + vId + " vPassword : " + vPassword + " isAutoLogin : " + isAutoLogin);
+                        Log.d("CHECK", "vId : " + vId + " deviceId : " + deviceId + " isAutoLogin : " + isAutoLogin);
+                    }
 
                     WebView01.loadUrl("javascript:setIsAutoLogin('" + isAutoLogin + "','" + deviceId + "','" + vId + "')");
                     if (isAutoLogin.equals("Y") && !vId.equals("") && !deviceId.equals("")) {
@@ -574,7 +543,7 @@ public class MainActivity extends AppCompatActivity {
                 SharedPreferences pref = getSharedPreferences("isFirst", Activity.MODE_PRIVATE);
                 boolean first = pref.getBoolean("isFirst", false);
                 if(first==false){
-                    Log.d("first","THE FIRST TIME");
+                    if ( BuildConfig.DEBUG)  Log.d("first","THE FIRST TIME");
                     SharedPreferences.Editor editor = pref.edit();
                     editor.putBoolean("isFirst",true);
                     editor.commit();
@@ -775,7 +744,7 @@ public class MainActivity extends AppCompatActivity {
         public void SendAppUrlBack(final String arg) {
             handler.post(new Runnable() {
                 public void run() {
-                    Log.d("CHECK", "sendAppUrlBack(" + arg + ")");
+                    if ( BuildConfig.DEBUG) Log.d("CHECK", "sendAppUrlBack(" + arg + ")");
                     WebView01.loadUrl(DataSet.connect_url + arg);
                 }
             });
@@ -829,7 +798,7 @@ public class MainActivity extends AppCompatActivity {
         public void SendAppAutoRegister(final String vId, final String vDeviceKey, final String isAutoLogin) {
             handler.post(new Runnable() {
                 public void run() {
-                    Log.d("CHECK", "SendAppAutoRegister(" + vId + ","+vDeviceKey+","+isAutoLogin+")");
+                    //Log.d("CHECK", "SendAppAutoRegister(" + vId + ","+vDeviceKey+","+isAutoLogin+")");
                     SharedPreferences prefs = getSharedPreferences("AutoLogin", Activity.MODE_PRIVATE);
                     SharedPreferences.Editor editor = prefs.edit();
                     editor.putString("isAutoLogin", isAutoLogin);
@@ -852,8 +821,7 @@ public class MainActivity extends AppCompatActivity {
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    String deviceid = deviceId;
-                    WebView01.loadUrl("javascript:fn_setDeviceId('" + deviceid + "')");
+                    WebView01.loadUrl("javascript:fn_setDeviceId('" + deviceId + "')");
                 }
             });
         }
@@ -932,7 +900,7 @@ public class MainActivity extends AppCompatActivity {
         public void SendAppPushDeviceDelete(final String arg) {
             handler.post(new Runnable() {
                 public void run() {
-                    Log.d("CHECK", "SendAppPushDeviceDelete(" + arg + ")");
+                    if ( BuildConfig.DEBUG) Log.d("CHECK", "SendAppPushDeviceDelete(" + arg + ")");
                     new Thread() {
                         public void run() {
                             String surl = DataSet.push_url + "/ccsFcm.do?cmd=delete_app&appid=" + DataSet.APPID + "&did=" + arg;
@@ -964,7 +932,7 @@ public class MainActivity extends AppCompatActivity {
         public void SendAppSetTime(final String startTime, final  String endTime, final String notiRecvDay) {
             handler.post(new Runnable() {
                 public void run() {
-                    Log.d("CHECK", "SendAppSetTime(" + startTime + ", " + endTime + ", " + notiRecvDay + ")");
+                    if ( BuildConfig.DEBUG) Log.d("CHECK", "SendAppSetTime(" + startTime + ", " + endTime + ", " + notiRecvDay + ")");
 
                     String notiFromHHmm = startTime;
                     String notiToHHmm = endTime;
@@ -1127,7 +1095,7 @@ public class MainActivity extends AppCompatActivity {
         public void SendAppLoadWebview(final String arg1) {
             handler.post(new Runnable() {
                 public void run() {
-                    Log.d("CHECK", "SendAppLoadWebview(), arg1 :: " + arg1);
+                    if ( BuildConfig.DEBUG) Log.d("CHECK", "SendAppLoadWebview(), arg1 :: " + arg1);
 
                     SharedPreferences prefs = getSharedPreferences("AutoLogin", Activity.MODE_PRIVATE);
                     //SharedPreferences.Editor editor = prefs.edit();
@@ -1168,7 +1136,7 @@ public class MainActivity extends AppCompatActivity {
         public void SendAppConfigSetAutoLogin(final String arg) {
             handler.post(new Runnable() {
                 public void run() {
-                    Log.d("CHECK", "SendAppConfigSetAutoLogin(" + arg + ")");
+                    if ( BuildConfig.DEBUG) Log.d("CHECK", "SendAppConfigSetAutoLogin(" + arg + ")");
 
                     SharedPreferences prefs = getSharedPreferences("AutoLogin", Activity.MODE_PRIVATE);
                     SharedPreferences.Editor editor = prefs.edit();
@@ -1184,7 +1152,7 @@ public class MainActivity extends AppCompatActivity {
         public void SendAppSetServiceList(final String arg) {
             handler.post(new Runnable() {
                 public void run() {
-                    Log.d("CHECK", "SendAppSetServiceList(" + arg + ")");
+                    if ( BuildConfig.DEBUG) Log.d("CHECK", "SendAppSetServiceList(" + arg + ")");
                     final JSONArray[] jsonArray = {null};
                     new Thread() {
                         public void run() {
@@ -1254,7 +1222,7 @@ public class MainActivity extends AppCompatActivity {
         public void SendAppNotiList(final String type, final String updateYn) {
             handler.post(new Runnable() {
                 public void run() {
-                    Log.d("CHECK", "SendAppNotiList(" + type + "," + updateYn + ")");
+                    if ( BuildConfig.DEBUG) Log.d("CHECK", "SendAppNotiList(" + type + "," + updateYn + ")");
 
                     if("Y".equals(updateYn)) {
                         WebView01.loadUrl("javascript:setPushReceiveAll('"+DataSet.getInstance().userid+"','"+DataSet.APPID+"','"+deviceId+"');");
@@ -1287,7 +1255,7 @@ public class MainActivity extends AppCompatActivity {
         public void SendAppLogout(final String arg) {
             handler.post(new Runnable() {
                 public void run() {
-                    Log.d("CHECK", "SendAppLogout(" + arg + ")");
+                    if ( BuildConfig.DEBUG) Log.d("CHECK", "SendAppLogout(" + arg + ")");
                     SharedPreferences prefs = getSharedPreferences("AutoLogin", Activity.MODE_PRIVATE);
                     SharedPreferences.Editor editor = prefs.edit();
                     //editor.putString("isAutoLogin", "N");
@@ -1306,7 +1274,7 @@ public class MainActivity extends AppCompatActivity {
         public void SendAppGoAppUpdate() {
             handler.post(new Runnable() {
                 public void run() {
-                    Log.d("CHECK", "SendAppGoAppUpdate()");
+                    if ( BuildConfig.DEBUG) Log.d("CHECK", "SendAppGoAppUpdate()");
                     final String appPackageName = getPackageName(); // getPackageName() from Context or Activity object
                     try {
                         startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
@@ -1323,7 +1291,7 @@ public class MainActivity extends AppCompatActivity {
             handler.post(new Runnable() {
                 public void run() {
                     if("insert".equals(type)) {
-                        Log.d("CHECK", "SendAppCarrierCodeSetting(" + type + "," + code + "," + name + ")");
+                        if ( BuildConfig.DEBUG) Log.d("CHECK", "SendAppCarrierCodeSetting(" + type + "," + code + "," + name + ")");
                         SharedPreferences prefs = getSharedPreferences("CarrierCode", Activity.MODE_PRIVATE);
                         SharedPreferences.Editor editor = prefs.edit();
                         String json = prefs.getString("CarrierCode", null);
@@ -1340,13 +1308,13 @@ public class MainActivity extends AppCompatActivity {
 
                             array.put(tmpj);
                             editor.putString("CarrierCode", array.toString());
-                            Log.d("CHECK", "array : " + array.toString());
+                            if ( BuildConfig.DEBUG) Log.d("CHECK", "array : " + array.toString());
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
                         editor.commit();
                     } else if("delete".equals(type)) {
-                        Log.d("CHECK", "SendAppCarrierCodeSetting(" + type + "," + code + "," + name + ")");
+                        if ( BuildConfig.DEBUG) Log.d("CHECK", "SendAppCarrierCodeSetting(" + type + "," + code + "," + name + ")");
                         SharedPreferences prefs = getSharedPreferences("CarrierCode", Activity.MODE_PRIVATE);
                         SharedPreferences.Editor editor = prefs.edit();
                         String json = prefs.getString("CarrierCode", null);
@@ -1368,7 +1336,7 @@ public class MainActivity extends AppCompatActivity {
                             }
 
                             editor.putString("CarrierCode", array.toString());
-                            Log.d("CHECK", "array : " + array.toString());
+                            if ( BuildConfig.DEBUG) Log.d("CHECK", "array : " + array.toString());
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -1383,7 +1351,7 @@ public class MainActivity extends AppCompatActivity {
         public void SendAppSetBookmarkCarrierCode() {
             handler.post(new Runnable() {
                 public void run() {
-                    Log.d("CHECK", "SendAppSetBookmarkCarrierCode()");
+                    if ( BuildConfig.DEBUG) Log.d("CHECK", "SendAppSetBookmarkCarrierCode()");
                     SharedPreferences prefs = getSharedPreferences("CarrierCode", Activity.MODE_PRIVATE);
                     String json = prefs.getString("CarrierCode", null);
 
@@ -1401,7 +1369,7 @@ public class MainActivity extends AppCompatActivity {
             handler.post(new Runnable() {
                 public void run() {
                     if("insert".equals(type)) {
-                        Log.d("CHECK", "SendAppTerminalCodeSetting(" + type + "," + code + "," + name + ")");
+                        if ( BuildConfig.DEBUG) Log.d("CHECK", "SendAppTerminalCodeSetting(" + type + "," + code + "," + name + ")");
                         SharedPreferences prefs = getSharedPreferences("TerminalCode", Activity.MODE_PRIVATE);
                         SharedPreferences.Editor editor = prefs.edit();
                         String json = prefs.getString("TerminalCode", null);
@@ -1418,13 +1386,13 @@ public class MainActivity extends AppCompatActivity {
 
                             array.put(tmpj);
                             editor.putString("TerminalCode", array.toString());
-                            Log.d("CHECK", "array : " + array.toString());
+                            if ( BuildConfig.DEBUG) Log.d("CHECK", "array : " + array.toString());
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
                         editor.commit();
                     } else if("delete".equals(type)) {
-                        Log.d("CHECK", "SendAppTerminalCodeSetting(" + type + "," + code + "," + name + ")");
+                        if ( BuildConfig.DEBUG) Log.d("CHECK", "SendAppTerminalCodeSetting(" + type + "," + code + "," + name + ")");
                         SharedPreferences prefs = getSharedPreferences("TerminalCode", Activity.MODE_PRIVATE);
                         SharedPreferences.Editor editor = prefs.edit();
                         String json = prefs.getString("TerminalCode", null);
@@ -1446,7 +1414,7 @@ public class MainActivity extends AppCompatActivity {
                             }
 
                             editor.putString("TerminalCode", array.toString());
-                            Log.d("CHECK", "array : " + array.toString());
+                            if ( BuildConfig.DEBUG) Log.d("CHECK", "array : " + array.toString());
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -1461,7 +1429,7 @@ public class MainActivity extends AppCompatActivity {
         public void SendAppSetBookmarkTerminalCode() {
             handler.post(new Runnable() {
                 public void run() {
-                    Log.d("CHECK", "SendAppSetBookmarkTerminalCode()");
+                    if ( BuildConfig.DEBUG) Log.d("CHECK", "SendAppSetBookmarkTerminalCode()");
                     SharedPreferences prefs = getSharedPreferences("TerminalCode", Activity.MODE_PRIVATE);
                     String json = prefs.getString("TerminalCode", null);
 
@@ -1480,7 +1448,7 @@ public class MainActivity extends AppCompatActivity {
             handler.post(new Runnable() {
                 public void run() {
                     if("insert".equals(type)) {
-                        Log.d("CHECK", "SendAppPodCodeSetting(" + type + "," + code + "," + name + ")");
+                        if ( BuildConfig.DEBUG) Log.d("CHECK", "SendAppPodCodeSetting(" + type + "," + code + "," + name + ")");
                         SharedPreferences prefs = getSharedPreferences("PodCode", Activity.MODE_PRIVATE);
                         SharedPreferences.Editor editor = prefs.edit();
                         String json = prefs.getString("PodCode", null);
@@ -1497,13 +1465,13 @@ public class MainActivity extends AppCompatActivity {
 
                             array.put(tmpj);
                             editor.putString("PodCode", array.toString());
-                            Log.d("CHECK", "array : " + array.toString());
+                            if ( BuildConfig.DEBUG) Log.d("CHECK", "array : " + array.toString());
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
                         editor.commit();
                     } else if("delete".equals(type)) {
-                        Log.d("CHECK", "SendAppPodCodeSetting(" + type + "," + code + "," + name + ")");
+                        if ( BuildConfig.DEBUG) Log.d("CHECK", "SendAppPodCodeSetting(" + type + "," + code + "," + name + ")");
                         SharedPreferences prefs = getSharedPreferences("PodCode", Activity.MODE_PRIVATE);
                         SharedPreferences.Editor editor = prefs.edit();
                         String json = prefs.getString("PodCode", null);
@@ -1525,7 +1493,7 @@ public class MainActivity extends AppCompatActivity {
                             }
 
                             editor.putString("PodCode", array.toString());
-                            Log.d("CHECK", "array : " + array.toString());
+                            if ( BuildConfig.DEBUG) Log.d("CHECK", "array : " + array.toString());
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -1540,7 +1508,7 @@ public class MainActivity extends AppCompatActivity {
         public void SendAppSetBookmarkPodCode() {
             handler.post(new Runnable() {
                 public void run() {
-                    Log.d("CHECK", "SendAppSetBookmarkPodCode()");
+                    if ( BuildConfig.DEBUG) Log.d("CHECK", "SendAppSetBookmarkPodCode()");
                     SharedPreferences prefs = getSharedPreferences("PodCode", Activity.MODE_PRIVATE);
                     String json = prefs.getString("PodCode", null);
 
@@ -1557,7 +1525,7 @@ public class MainActivity extends AppCompatActivity {
         public void SendAppSetCarrierCode() {
             handler.post(new Runnable() {
                 public void run() {
-                    Log.d("CHECK", "SendAppSetCarrierCode()");
+                    if ( BuildConfig.DEBUG) Log.d("CHECK", "SendAppSetCarrierCode()");
                     SharedPreferences prefs = getSharedPreferences("CarrierCode", Activity.MODE_PRIVATE);
                     String json = prefs.getString("CarrierCode", null);
 
@@ -1573,7 +1541,7 @@ public class MainActivity extends AppCompatActivity {
         public void SendAppSetTerminalCode() {
             handler.post(new Runnable() {
                 public void run() {
-                    Log.d("CHECK", "SendAppSetTerminalCode()");
+                    if ( BuildConfig.DEBUG) Log.d("CHECK", "SendAppSetTerminalCode()");
                     SharedPreferences prefs = getSharedPreferences("TerminalCode", Activity.MODE_PRIVATE);
                     String json = prefs.getString("TerminalCode", null);
 
@@ -1590,7 +1558,7 @@ public class MainActivity extends AppCompatActivity {
         public void SendAppSetPodCode() {
             handler.post(new Runnable() {
                 public void run() {
-                    Log.d("CHECK", "SendAppSetPodCode()");
+                    if ( BuildConfig.DEBUG) Log.d("CHECK", "SendAppSetPodCode()");
                     SharedPreferences prefs = getSharedPreferences("PodCode", Activity.MODE_PRIVATE);
                     String json = prefs.getString("PodCode", null);
 
@@ -1607,7 +1575,7 @@ public class MainActivity extends AppCompatActivity {
         public void SendAppGoWebUrl(final String url) {
             handler.post(new Runnable() {
                 public void run() {
-                    Log.d("CHECK", "SendAppGoWebUrl("+url+")");
+                    if ( BuildConfig.DEBUG) Log.d("CHECK", "SendAppGoWebUrl("+url+")");
 
                     Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(DataSet.connect_url + url));
                     startActivity(intent);
@@ -1620,7 +1588,7 @@ public class MainActivity extends AppCompatActivity {
         public void setChangeMode(final String arg) {
             handler.post(new Runnable() {
                 public void run() {
-                    Log.d("CHECK", "setChangeMode()");
+                    if ( BuildConfig.DEBUG) Log.d("CHECK", "setChangeMode()");
                     if ("D".equals(DataSet.isMode)) {
                         //REAL 사이트
                         DataSet.connect_url = DataSet.connect_real_url;
@@ -1642,12 +1610,12 @@ public class MainActivity extends AppCompatActivity {
         public void SendAppAutoReLogin(final String sVersion) {
             handler.post(new Runnable() {
                 public void run() {
-                    Log.d("CHECK", "SendAppAutoReLogin("+sVersion+")");
+                    if ( BuildConfig.DEBUG) Log.d("CHECK", "SendAppAutoReLogin("+sVersion+")");
 
                     float fVersion=Float.parseFloat(sVersion);
                     PackageManager packageManager = getPackageManager();
                     PackageInfo packageInfo = null;
-                    Log.d("###","forceUpdate");
+                    if ( BuildConfig.DEBUG) Log.d("###","forceUpdate");
                     try {
                         packageInfo =packageManager.getPackageInfo(getPackageName(),0);
                     } catch (PackageManager.NameNotFoundException e) {
@@ -1684,10 +1652,12 @@ public class MainActivity extends AppCompatActivity {
                         String vId = prefs.getString("vId", DataSet.getInstance().userid);
                         //String vPassword = prefs.getString("vPassword", "");
 
-                        Log.d("CHECK", "vId : " + vId + " isAutoLogin : " + isAutoLogin);
-                        Log.d("CHECK", "deviceId " + deviceId + " isAutoLogin : " + isAutoLogin);
-                        Log.d("CHECK","DataSet.getInstance().userid : "+DataSet.getInstance().userid);
-                        Log.d("CHECK","DataSet.getInstance().islogin : "+DataSet.getInstance().islogin);
+                        if ( BuildConfig.DEBUG) {
+                            Log.d("CHECK", "vId : " + vId + " isAutoLogin : " + isAutoLogin);
+                            Log.d("CHECK", "deviceId " + deviceId + " isAutoLogin : " + isAutoLogin);
+                            Log.d("CHECK", "DataSet.getInstance().userid : " + DataSet.getInstance().userid);
+                            Log.d("CHECK", "DataSet.getInstance().islogin : " + DataSet.getInstance().islogin);
+                        }
 
                         WebView01.loadUrl("javascript:setIsAutoLogin('"+isAutoLogin+"','" + deviceId + "','" + vId + "')");
                         if (DataSet.getInstance().islogin.equals("true") && isAutoLogin.equals("Y") && !vId.equals("") ) {
@@ -1866,7 +1836,7 @@ public class MainActivity extends AppCompatActivity {
         // TODO Auto-generated method stub
         super.onNewIntent(intent);
 
-        Log.d("CHECK", "push_id : " + intent.getStringExtra("push_id"));
+        if ( BuildConfig.DEBUG) Log.d("CHECK", "push_id : " + intent.getStringExtra("push_id"));
         //앱이 실행된 상태에서 푸시를 보는 경우
         if (intent != null) {
             if(DataSet.getInstance().islogin.equals("true")) {
@@ -1981,7 +1951,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static String getMarketVersion(String packageName) {
 
-        Log.d("CHECK", packageName);
+        if ( BuildConfig.DEBUG) Log.d("CHECK", packageName);
 
         try {
             Document document = Jsoup.connect("https://play.google.com/store/apps/details?id=" + packageName).get();
@@ -2048,7 +2018,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (android.os.Build.VERSION.SDK_INT >= M) {
             // only for LOLLIPOP and newer versions
-            Log.d("CHECK","Hello Marshmallow (마시멜로우)");
+            if ( BuildConfig.DEBUG) Log.d("CHECK","Hello Marshmallow (마시멜로우)");
             int permissionResult = getApplicationContext().checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
             int camerapermissionResult = getApplicationContext().checkSelfPermission(Manifest.permission.CAMERA);
             if (permissionResult == PackageManager.PERMISSION_DENIED || camerapermissionResult == PackageManager.PERMISSION_DENIED) {
@@ -2096,7 +2066,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
         } else {
-            Log.d("CHECK","(마시멜로우 이하 버전입니다.)");
+            if ( BuildConfig.DEBUG) Log.d("CHECK","(마시멜로우 이하 버전입니다.)");
             //   getThumbInfo();
         }
 

@@ -37,10 +37,10 @@ public class DataSet {
 	public String type;		// 메세지 종류
 
 	//최초
-	public static String isMode = "D";  //P-운영,D-개발  최초접속모드
-	//public static String connect_url = "https://etrans.klnet.co.kr";
-	public static String connect_url = "https://devetrans.klnet.co.kr";
-	public static String push_url = "https://testpush.plism.com";
+	public static String isMode = "P";  //P-운영,D-개발  최초접속모드
+	public static String connect_url = "https://etrans.klnet.co.kr";
+	//public static String connect_url = "https://devetrans.klnet.co.kr";
+	public static String push_url = "https://push.plism.com";
 
 	//운영
 	public static String connect_real_url = "https://etrans.klnet.co.kr";
